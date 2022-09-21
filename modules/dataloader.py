@@ -35,11 +35,11 @@ def split_indices(folder, seed1, seed2):
     Returns  (train, valid, test) indices
     '''
     n = len(os.listdir(folder))
-    full_set = list(range(1,n+1))
+    full_set = [x for x in os.listdir(folder) if x.endswith(".jpg")]
 
     ## train indices
     random.seed(seed1)
-    train = random.sample(list(range(1,n+1)),int(.5*n))
+    train = random.sample(full_set,int(.5*n))
 
     ## temp
     remain = list(set(full_set)-set(train))
@@ -60,7 +60,7 @@ def get_names(waste_type, indices):
                    indices: indices for the train, valid, and test datasets
     - Returns:     file names    
     '''
-    file_names = [waste_type+str(i)+".jpg" for i in indices]
+    file_names = [waste_type+' '+str(i)+".jpg" for i in indices]
     return(file_names)    
 
 
@@ -82,14 +82,14 @@ def split_train_val_test():
     Paths will be train/cardboard, train/glass, etc...  
     '''
     
-    subsets = ['train','val']
-    waste_types = ['cardboard','glass','metal','paper','plastic','trash', 'compost']
+    subsets = ['train','val','test']
+    waste_types = ['cardboard','glass','metal','paper','plastic','medical', 'e-waste']
     
     
-    inBase = "Documents/GitHub/CS231n-Project-2019/datasets/trashnet/data/dataset-resized"
-    inDataPath = os.path.join(userPath, inBase)
-    outBase = "Documents/GitHub/CS231n-Project-2019/datasets/trashnet/data/dataset-split"
-    outDataPath = os.path.join(userPath, outBase)
+    inBase = "../TrashBox-VGG19_model/TrashBox_train_set"
+    inDataPath = os.path.join(inBase)
+    outBase = "../TrashBox-VGG19_model/split_dataset"
+    outDataPath = os.path.join(outBase)
 
 
     ## create destination folders for data subset and waste type
@@ -108,23 +108,25 @@ def split_train_val_test():
         train_ind, valid_ind, test_ind = split_indices(source_folder,1,1)
 
         ## move source files to train
-        train_names = get_names(waste_type,train_ind)
-        train_source_files = [os.path.join(source_folder,name) for name in train_names]
-        train_dest = userPath.replace("\\", "/") + "/" + outBase + "/train/" + waste_type
+        ##train_names = get_names(waste_type,train_ind)
+        train_source_files = [os.path.join(source_folder,name) for name in train_ind]
+        train_dest = outBase + "/train/" + waste_type
         move_files(train_source_files,train_dest)
         
         ## move source files to valid
-        valid_names = get_names(waste_type,valid_ind)
-        valid_source_files = [os.path.join(source_folder,name) for name in valid_names]
-        valid_dest = userPath.replace("\\", "/") + "/" + outBase + "/val/" + waste_type
+        ##valid_names = get_names(waste_type,valid_ind)
+        valid_source_files = [os.path.join(source_folder,name) for name in valid_ind]
+        valid_dest = outBase + "/val/" + waste_type
         move_files(valid_source_files,valid_dest)
         
         ## move source files to test
-        test_names = get_names(waste_type,test_ind)
-        test_source_files = [os.path.join(source_folder,name) for name in test_names]
+        ##test_names = get_names(waste_type,test_ind)
+        test_source_files = [os.path.join(source_folder,name) for name in test_ind]
+        test_dest = outBase + "/test/" + waste_type
+        move_files(test_source_files,test_dest)
         
         ## I use data/test here because the images can be mixed up
-        move_files(test_source_files, userPath.replace("\\", "/") + "/" + outBase + "/test")
+        #move_files(test_source_files, outBase + "/test")
 
 
 def augment():

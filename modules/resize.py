@@ -47,8 +47,8 @@ def main():
     cardboardDir = os.path.join(prepath, 'cardboard')
     plasticDir = os.path.join(prepath, 'plastic')
     metalDir = os.path.join(prepath, 'metal')
-    trashDir = os.path.join(prepath, 'trash')
-    compostDir = os.path.join(prepath, 'compost')
+    trashDir = os.path.join(prepath, 'medical')
+    compostDir = os.path.join(prepath, 'e-waste')
 
     destPath = os.path.join(parentPath, 'datasets/trashnet/data/dataset-resized')
 
@@ -76,10 +76,10 @@ def main():
     fileWalk(metalDir, os.path.join(destPath, 'metal'))
 
     #TRASH
-    fileWalk(trashDir, os.path.join(destPath, 'trash'))
+    fileWalk(trashDir, os.path.join(destPath, 'medical'))
 
     #COMPOST
-    fileWalk(compostDir, os.path.join(destPath, 'compost'))
+    fileWalk(compostDir, os.path.join(destPath, 'e-waste'))
 
             
 if __name__ == '__main__':
